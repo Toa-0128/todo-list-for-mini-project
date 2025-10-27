@@ -1,1 +1,98 @@
+# diccionary
 
+todo_list = {}
+
+
+def add_task():
+    day = input("Enter the day (e.g. Monday): ").capitalize()
+
+    if day not in todo_list:
+        todo_list[day] = {"Morning": [], "Afternoon": [], "Evening": []}
+
+    print("Select Time Section:")
+    print("1. Morning")
+    print("2. Afternoon")
+    print("3. Evening")
+
+    section_option = input("Choose an option: ")
+
+    if section_option == "1":
+        section = "Morning"
+    elif section_option == "2":
+        section = "Afternoon"
+    elif section_option == "3":
+        section = "Evening"
+    else:
+        print("Invalid option")
+        return
+
+    task = input("Write your task: ")
+    todo_list[day][section].append(task)
+    print(f"Task added to {day} - {section}")
+
+
+def view_tasks():
+    if not todo_list:
+        print("No tasks saved yet.")
+        return
+
+    for day, sections in todo_list.items():
+        print(f"\n--- {day} ---")
+        for section, tasks in sections.items():
+            print(f" {section}:")
+            if tasks:
+                for idx, task in enumerate(tasks, 1):
+                    print(f"   {idx}. {task}")
+            else:
+                print("   No tasks")
+
+
+def delete_task():
+    view_tasks()
+    day = input("\nEnter the day to edit: ").capitalize()
+
+    if day not in todo_list:
+        print("Day not found")
+        return
+
+    section = input("Enter section (Morning, Afternoon, Evening): ").capitalize()
+    if section not in todo_list[day]:
+        print("Section not found")
+        return
+
+    for idx, task in enumerate(todo_list[day][section], 1):
+        print(f"{idx}. {task}")
+
+    task_index = int(input("Select the task number to delete: ")) - 1
+
+    if 0 <= task_index < len(todo_list[day][section]):
+        removed = todo_list[day][section].pop(task_index)
+        print(f"Removed: {removed}")
+    else:
+        print("Invalid task number")
+
+
+def menu():
+    while True:
+        print("\n==== TO-DO LIST MENU ====")
+        print("1. Add Task")
+        print("2. View Tasks")
+        print("3. Delete Task")
+        print("4. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            add_task()
+        elif choice == "2":
+            view_tasks()
+        elif choice == "3":
+            delete_task()
+        elif choice == "4":
+            print("Goodbye Mario!")
+            break
+        else:
+            print("Invalid option. Try again.")
+
+
+menu()
